@@ -160,7 +160,7 @@ void Session::Impl::SetPayload(const Payload& payload) {
     auto curl = curl_->handle;
     if (curl) {
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, payload.content.length());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload.content.data());
+        curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, payload.content.data());
     }
 }
 
@@ -271,7 +271,7 @@ void Session::Impl::SetBody(const Body& body) {
     auto curl = curl_->handle;
     if (curl) {
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, body.length());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.data());
+        curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, body.data());
     }
 }
 
@@ -352,6 +352,7 @@ Response Session::Impl::Post() {
     if (curl) {
         curl_easy_setopt(curl, CURLOPT_HTTPGET, 0L);
         curl_easy_setopt(curl, CURLOPT_NOBODY, 0L);
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
     }
 
     return makeRequest(curl);
